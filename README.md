@@ -1,5 +1,5 @@
 - 👋 Hi, I’m Mary Evans.
-- 👀 I’m interested in data analysis, specifically bioninformatics, genomics, Big Data and data visualizations.
+- 👀 I’m interested in data analytics, Big Data and data visualizations.
 - 🌱 I’m currently a M.S. student in Data Analystics with Oregon State University. 
 - 💞️ I’m looking to collaborate on side-projects utilizing R/Python coding skills, and a transdisciplinary approach to life science problems. 
 - 📫 https://www.linkedin.com/in/mary-evans-658035225
