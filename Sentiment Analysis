@@ -1,0 +1,815 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "bfc625fd",
+   "metadata": {
+    "papermill": {
+     "duration": 0.007343,
+     "end_time": "2024-06-03T00:03:05.920210",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:05.912867",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# What to Do\n",
+    "\n",
+    "Make this entire notebook a professional quality artifact that is worth showing to an interviewer, colleague, or client. You may model your work after all of the previous notebooks we have seen in this course. Keep in mind that *you* are the author of this notebook, and that fellow professionals are the audience. As such, be sure to delete all text above this statement, such that your **Introduction** introduces us to the problem/goal that we will see in the notebook."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d3a7cb34",
+   "metadata": {
+    "papermill": {
+     "duration": 0.006518,
+     "end_time": "2024-06-03T00:03:05.933736",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:05.927218",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# Problem Statement"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a0be392e",
+   "metadata": {
+    "papermill": {
+     "duration": 0.006457,
+     "end_time": "2024-06-03T00:03:05.947051",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:05.940594",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Notebook 9 aims to demonstrate proficiency in meeting course learning goals by applying an ML model to solve a classification problem using ML libraries. This includes describing and applying a ML workflow.\n",
+    "\n",
+    "This notebook provides a guide through **sentiment analysis** ML workflow, using a **logistic regression** (linear classifier) from the scikit-learn python library."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f0426e73",
+   "metadata": {
+    "papermill": {
+     "duration": 0.006478,
+     "end_time": "2024-06-03T00:03:05.960315",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:05.953837",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# Step 1: Import Libraries"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "ae3fed11",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T00:03:05.976785Z",
+     "iopub.status.busy": "2024-06-03T00:03:05.975860Z",
+     "iopub.status.idle": "2024-06-03T00:03:07.576051Z",
+     "shell.execute_reply": "2024-06-03T00:03:07.574843Z"
+    },
+    "papermill": {
+     "duration": 1.61207,
+     "end_time": "2024-06-03T00:03:07.579121",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:05.967051",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/opt/conda/lib/python3.10/site-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.16.5 and <1.23.0 is required for this version of SciPy (detected version 1.23.5\n",
+      "  warnings.warn(f\"A NumPy version >={np_minversion} and <{np_maxversion}\"\n"
+     ]
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "import matplotlib.pyplot as plt\n",
+    "\n",
+    "from sklearn.model_selection import train_test_split\n",
+    "from sklearn.metrics import accuracy_score\n",
+    "from sklearn.metrics import precision_score\n",
+    "from sklearn.metrics import recall_score\n",
+    "\n",
+    "from sklearn.linear_model import LogisticRegression"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f49f3f49",
+   "metadata": {
+    "papermill": {
+     "duration": 0.007405,
+     "end_time": "2024-06-03T00:03:07.594209",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:07.586804",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# Step 2: Load the Data"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c42f5f8e",
+   "metadata": {
+    "papermill": {
+     "duration": 0.006828,
+     "end_time": "2024-06-03T00:03:07.608220",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:07.601392",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "This model is trained with the the **Sentiment Polarity Data Set v2.0** from [Movie Review Data](http://www.cs.cornell.edu/people/pabo/movie-review-data/) by Pang, Lee and Vaithyanathan. The complete training set and a test set have been provided, and hence the workflow for these steps are excluded from this notebook. Please refer to outside sources to better understand the steps used for data exploration, preprocessing, and preparing the test and training sets used in ML model applications.\n",
+    "\n",
+    "Kaggle's movie-review datasets are widely used in publication. They are labeled using their **sentiment polarity** (positive or negative) or **subjective rating** (how many stars the movie recieves). The text sentences are labeled with their **subjectivity status** (subjective or objective - i.e. polarity)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "d2d2fa50",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T00:03:07.625487Z",
+     "iopub.status.busy": "2024-06-03T00:03:07.624167Z",
+     "iopub.status.idle": "2024-06-03T00:03:07.837030Z",
+     "shell.execute_reply": "2024-06-03T00:03:07.835600Z"
+    },
+    "papermill": {
+     "duration": 0.224617,
+     "end_time": "2024-06-03T00:03:07.840104",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:07.615487",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "reviews_training = pd.read_csv(\"/kaggle/input/movie-reviews-sentiment-polarity/movie_reviews_train.csv\")\n",
+    "reviews_test = pd.read_csv(\"/kaggle/input/movie-reviews-sentiment-polarity/movie_reviews_test.csv\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ea2204e1",
+   "metadata": {
+    "papermill": {
+     "duration": 0.007309,
+     "end_time": "2024-06-03T00:03:07.855345",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:07.848036",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 3: Explore the Data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "95451a78",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T00:03:07.872704Z",
+     "iopub.status.busy": "2024-06-03T00:03:07.872271Z",
+     "iopub.status.idle": "2024-06-03T00:03:07.922081Z",
+     "shell.execute_reply": "2024-06-03T00:03:07.920805Z"
+    },
+    "papermill": {
+     "duration": 0.061885,
+     "end_time": "2024-06-03T00:03:07.924892",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:07.863007",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Content</th>\n",
+       "      <th>Label</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>count</th>\n",
+       "      <td>1800</td>\n",
+       "      <td>1800</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>unique</th>\n",
+       "      <td>1800</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>top</th>\n",
+       "      <td>every once in a while you see a film that is s...</td>\n",
+       "      <td>pos</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>freq</th>\n",
+       "      <td>1</td>\n",
+       "      <td>900</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                                  Content Label\n",
+       "count                                                1800  1800\n",
+       "unique                                               1800     2\n",
+       "top     every once in a while you see a film that is s...   pos\n",
+       "freq                                                    1   900"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "reviews_training.describe()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7a6c979f",
+   "metadata": {
+    "papermill": {
+     "duration": 0.007403,
+     "end_time": "2024-06-03T00:03:07.939766",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:07.932363",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "There is a count of 1800 values in the training data set."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "f202be74",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T00:03:07.957531Z",
+     "iopub.status.busy": "2024-06-03T00:03:07.957114Z",
+     "iopub.status.idle": "2024-06-03T00:03:07.972728Z",
+     "shell.execute_reply": "2024-06-03T00:03:07.971314Z"
+    },
+    "papermill": {
+     "duration": 0.028184,
+     "end_time": "2024-06-03T00:03:07.975279",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:07.947095",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Content</th>\n",
+       "      <th>Label</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>count</th>\n",
+       "      <td>200</td>\n",
+       "      <td>200</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>unique</th>\n",
+       "      <td>200</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>top</th>\n",
+       "      <td>hedwig ( john cameron mitchell ) was born a bo...</td>\n",
+       "      <td>pos</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>freq</th>\n",
+       "      <td>1</td>\n",
+       "      <td>100</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                                  Content Label\n",
+       "count                                                 200   200\n",
+       "unique                                                200     2\n",
+       "top     hedwig ( john cameron mitchell ) was born a bo...   pos\n",
+       "freq                                                    1   100"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "reviews_test.describe()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3a2e09b5",
+   "metadata": {
+    "papermill": {
+     "duration": 0.007126,
+     "end_time": "2024-06-03T00:03:07.989968",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:07.982842",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "There is a subset count of 200 values from the original data set, assigned to test these data."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "250b4907",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T00:03:08.008680Z",
+     "iopub.status.busy": "2024-06-03T00:03:08.007566Z",
+     "iopub.status.idle": "2024-06-03T00:03:08.019714Z",
+     "shell.execute_reply": "2024-06-03T00:03:08.018211Z"
+    },
+    "papermill": {
+     "duration": 0.024977,
+     "end_time": "2024-06-03T00:03:08.022381",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:07.997404",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Content</th>\n",
+       "      <th>Label</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>every once in a while you see a film that is s...</td>\n",
+       "      <td>pos</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>the love for family is one of the strongest dr...</td>\n",
+       "      <td>pos</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>after the terminally bleak reservoir dogs and ...</td>\n",
+       "      <td>pos</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>( warning to those who have not seen seven : ...</td>\n",
+       "      <td>pos</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>having not seen , \" who framed roger rabbit \" ...</td>\n",
+       "      <td>pos</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                             Content Label\n",
+       "0  every once in a while you see a film that is s...   pos\n",
+       "1  the love for family is one of the strongest dr...   pos\n",
+       "2  after the terminally bleak reservoir dogs and ...   pos\n",
+       "3   ( warning to those who have not seen seven : ...   pos\n",
+       "4  having not seen , \" who framed roger rabbit \" ...   pos"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "reviews_training.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "80f8c4bb",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T00:03:08.040735Z",
+     "iopub.status.busy": "2024-06-03T00:03:08.039968Z",
+     "iopub.status.idle": "2024-06-03T00:03:08.051172Z",
+     "shell.execute_reply": "2024-06-03T00:03:08.049904Z"
+    },
+    "papermill": {
+     "duration": 0.023501,
+     "end_time": "2024-06-03T00:03:08.054108",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:08.030607",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Content</th>\n",
+       "      <th>Label</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>hedwig ( john cameron mitchell ) was born a bo...</td>\n",
+       "      <td>pos</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>one of the more unusual and suggestively viole...</td>\n",
+       "      <td>pos</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>what do you get when you combine clueless and ...</td>\n",
+       "      <td>pos</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>&gt;from the man who presented us with henry : th...</td>\n",
+       "      <td>pos</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>tibet has entered the american consciousness s...</td>\n",
+       "      <td>pos</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                             Content Label\n",
+       "0  hedwig ( john cameron mitchell ) was born a bo...   pos\n",
+       "1  one of the more unusual and suggestively viole...   pos\n",
+       "2  what do you get when you combine clueless and ...   pos\n",
+       "3  >from the man who presented us with henry : th...   pos\n",
+       "4  tibet has entered the american consciousness s...   pos"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "reviews_test.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "69b22eb3",
+   "metadata": {
+    "papermill": {
+     "duration": 0.008242,
+     "end_time": "2024-06-03T00:03:08.070488",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:08.062246",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "We can see that our data is text data (to be expected), and there are two columns. The label columns assigns the polarirt (positive or negative reviews) for the movie review, and the text column provides the original human text describing the reviewers opinions."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d86d0011",
+   "metadata": {
+    "papermill": {
+     "duration": 0.007714,
+     "end_time": "2024-06-03T00:03:08.086393",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:08.078679",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 4: Preprocessing "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "33c80090",
+   "metadata": {
+    "papermill": {
+     "duration": 0.007641,
+     "end_time": "2024-06-03T00:03:08.102000",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:08.094359",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Sentiment analysis problems often require raw data in the form of text - think Yelp reviews, google reviews, movie reviews all of which subtly express the nuances in human discord. Sentiment analysis is a classification task,meaning the preprocessing steps include feature vectors translated into what is known as a \"bag of words\". \n",
+    "\n",
+    "Classifications for sentiment analysis commonly relay on \"normalized\" form of the frequencies, known as the **Term Frequency** - Inverse Document Frequency (TF-IDF). These applications are accessed in the "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "cfb086fa",
+   "metadata": {
+    "papermill": {
+     "duration": 0.008169,
+     "end_time": "2024-06-03T00:03:08.118085",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:08.109916",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4a42a0eb",
+   "metadata": {
+    "papermill": {
+     "duration": 0.008095,
+     "end_time": "2024-06-03T00:03:08.134699",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:08.126604",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 5: Model Validation"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0a287ca2",
+   "metadata": {
+    "papermill": {
+     "duration": 0.00829,
+     "end_time": "2024-06-03T00:03:08.152189",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:08.143899",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 6: Predications"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "32a2a428",
+   "metadata": {
+    "papermill": {
+     "duration": 0.008599,
+     "end_time": "2024-06-03T00:03:08.169220",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:08.160621",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 7: Adjusting the Model"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d6eb0a65",
+   "metadata": {
+    "papermill": {
+     "duration": 0.008674,
+     "end_time": "2024-06-03T00:03:08.185913",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:08.177239",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 8: Model Validation"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d85936c1",
+   "metadata": {
+    "papermill": {
+     "duration": 0.008292,
+     "end_time": "2024-06-03T00:03:08.202259",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:08.193967",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 9: Hyperparameter Experiementation"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6184bbd2",
+   "metadata": {
+    "papermill": {
+     "duration": 0.007762,
+     "end_time": "2024-06-03T00:03:08.218245",
+     "exception": false,
+     "start_time": "2024-06-03T00:03:08.210483",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Conclusions"
+   ]
+  }
+ ],
+ "metadata": {
+  "kaggle": {
+   "accelerator": "none",
+   "dataSources": [
+    {
+     "datasetId": 3305754,
+     "sourceId": 5747460,
+     "sourceType": "datasetVersion"
+    }
+   ],
+   "dockerImageVersionId": 30474,
+   "isGpuEnabled": false,
+   "isInternetEnabled": true,
+   "language": "python",
+   "sourceType": "notebook"
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.10.10"
+  },
+  "papermill": {
+   "default_parameters": {},
+   "duration": 19.24017,
+   "end_time": "2024-06-03T00:03:09.248682",
+   "environment_variables": {},
+   "exception": null,
+   "input_path": "__notebook__.ipynb",
+   "output_path": "__notebook__.ipynb",
+   "parameters": {},
+   "start_time": "2024-06-03T00:02:50.008512",
+   "version": "2.4.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
