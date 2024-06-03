@@ -2,13 +2,13 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "id": "bfc625fd",
+   "id": "d4d1c091",
    "metadata": {
     "papermill": {
-     "duration": 0.007343,
-     "end_time": "2024-06-03T00:03:05.920210",
+     "duration": 0.023371,
+     "end_time": "2024-06-03T04:19:34.688961",
      "exception": false,
-     "start_time": "2024-06-03T00:03:05.912867",
+     "start_time": "2024-06-03T04:19:34.665590",
      "status": "completed"
     },
     "tags": []
@@ -21,13 +21,47 @@
   },
   {
    "cell_type": "markdown",
-   "id": "d3a7cb34",
+   "id": "24796b48",
    "metadata": {
     "papermill": {
-     "duration": 0.006518,
-     "end_time": "2024-06-03T00:03:05.933736",
+     "duration": 0.022454,
+     "end_time": "2024-06-03T04:19:34.733998",
      "exception": false,
-     "start_time": "2024-06-03T00:03:05.927218",
+     "start_time": "2024-06-03T04:19:34.711544",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# Introduction"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a23ddae4",
+   "metadata": {
+    "papermill": {
+     "duration": 0.02294,
+     "end_time": "2024-06-03T04:19:34.779658",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:34.756718",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Notebook 9 aims to demonstrate proficiency in meeting course learning goals by applying an ML model to solve a classification problem using ML libraries. This includes describing and applying a ML workflow."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "66785202",
+   "metadata": {
+    "papermill": {
+     "duration": 0.023342,
+     "end_time": "2024-06-03T04:19:34.826161",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:34.802819",
      "status": "completed"
     },
     "tags": []
@@ -38,32 +72,30 @@
   },
   {
    "cell_type": "markdown",
-   "id": "a0be392e",
+   "id": "f3742fd7",
    "metadata": {
     "papermill": {
-     "duration": 0.006457,
-     "end_time": "2024-06-03T00:03:05.947051",
+     "duration": 0.022843,
+     "end_time": "2024-06-03T04:19:34.872083",
      "exception": false,
-     "start_time": "2024-06-03T00:03:05.940594",
+     "start_time": "2024-06-03T04:19:34.849240",
      "status": "completed"
     },
     "tags": []
    },
    "source": [
-    "Notebook 9 aims to demonstrate proficiency in meeting course learning goals by applying an ML model to solve a classification problem using ML libraries. This includes describing and applying a ML workflow.\n",
-    "\n",
-    "This notebook provides a guide through **sentiment analysis** ML workflow, using a **logistic regression** (linear classifier) from the scikit-learn python library."
+    "This notebook provides a guide through **sentiment analysis** ML workflow, using a **Support Vector Machine (SVM)** (linear classifier) from the scikit-learn python library. First, we must work through a Machine Learning workflow to ensure our data is prepared for the analysis, ensuring we can relay on our model's results. Carefully assessing and processing these data results in accurate modeling and trustworthy applications."
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "f0426e73",
+   "id": "52be4407",
    "metadata": {
     "papermill": {
-     "duration": 0.006478,
-     "end_time": "2024-06-03T00:03:05.960315",
+     "duration": 0.022144,
+     "end_time": "2024-06-03T04:19:34.917066",
      "exception": false,
-     "start_time": "2024-06-03T00:03:05.953837",
+     "start_time": "2024-06-03T04:19:34.894922",
      "status": "completed"
     },
     "tags": []
@@ -75,19 +107,19 @@
   {
    "cell_type": "code",
    "execution_count": 1,
-   "id": "ae3fed11",
+   "id": "6e44cae1",
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-06-03T00:03:05.976785Z",
-     "iopub.status.busy": "2024-06-03T00:03:05.975860Z",
-     "iopub.status.idle": "2024-06-03T00:03:07.576051Z",
-     "shell.execute_reply": "2024-06-03T00:03:07.574843Z"
+     "iopub.execute_input": "2024-06-03T04:19:34.965685Z",
+     "iopub.status.busy": "2024-06-03T04:19:34.965016Z",
+     "iopub.status.idle": "2024-06-03T04:19:36.479422Z",
+     "shell.execute_reply": "2024-06-03T04:19:36.478195Z"
     },
     "papermill": {
-     "duration": 1.61207,
-     "end_time": "2024-06-03T00:03:07.579121",
+     "duration": 1.541925,
+     "end_time": "2024-06-03T04:19:36.482338",
      "exception": false,
-     "start_time": "2024-06-03T00:03:05.967051",
+     "start_time": "2024-06-03T04:19:34.940413",
      "status": "completed"
     },
     "tags": []
@@ -107,22 +139,22 @@
     "import matplotlib.pyplot as plt\n",
     "\n",
     "from sklearn.model_selection import train_test_split\n",
-    "from sklearn.metrics import accuracy_score\n",
-    "from sklearn.metrics import precision_score\n",
-    "from sklearn.metrics import recall_score\n",
-    "\n",
-    "from sklearn.linear_model import LogisticRegression"
+    "from sklearn.feature_extraction.text import TfidfVectorizer\n",
+    "from sklearn.feature_extraction.text import CountVectorizer\n",
+    "from sklearn.metrics import classification_report\n",
+    "from sklearn.svm import SVC\n",
+    "from sklearn import svm"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "f49f3f49",
+   "id": "cd1113dc",
    "metadata": {
     "papermill": {
-     "duration": 0.007405,
-     "end_time": "2024-06-03T00:03:07.594209",
+     "duration": 0.022887,
+     "end_time": "2024-06-03T04:19:36.528868",
      "exception": false,
-     "start_time": "2024-06-03T00:03:07.586804",
+     "start_time": "2024-06-03T04:19:36.505981",
      "status": "completed"
     },
     "tags": []
@@ -133,13 +165,13 @@
   },
   {
    "cell_type": "markdown",
-   "id": "c42f5f8e",
+   "id": "8ff2f543",
    "metadata": {
     "papermill": {
-     "duration": 0.006828,
-     "end_time": "2024-06-03T00:03:07.608220",
+     "duration": 0.022336,
+     "end_time": "2024-06-03T04:19:36.573823",
      "exception": false,
-     "start_time": "2024-06-03T00:03:07.601392",
+     "start_time": "2024-06-03T04:19:36.551487",
      "status": "completed"
     },
     "tags": []
@@ -153,19 +185,19 @@
   {
    "cell_type": "code",
    "execution_count": 2,
-   "id": "d2d2fa50",
+   "id": "b854d0c7",
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-06-03T00:03:07.625487Z",
-     "iopub.status.busy": "2024-06-03T00:03:07.624167Z",
-     "iopub.status.idle": "2024-06-03T00:03:07.837030Z",
-     "shell.execute_reply": "2024-06-03T00:03:07.835600Z"
+     "iopub.execute_input": "2024-06-03T04:19:36.620988Z",
+     "iopub.status.busy": "2024-06-03T04:19:36.620580Z",
+     "iopub.status.idle": "2024-06-03T04:19:36.848012Z",
+     "shell.execute_reply": "2024-06-03T04:19:36.846562Z"
     },
     "papermill": {
-     "duration": 0.224617,
-     "end_time": "2024-06-03T00:03:07.840104",
+     "duration": 0.25496,
+     "end_time": "2024-06-03T04:19:36.851296",
      "exception": false,
-     "start_time": "2024-06-03T00:03:07.615487",
+     "start_time": "2024-06-03T04:19:36.596336",
      "status": "completed"
     },
     "tags": []
@@ -178,13 +210,13 @@
   },
   {
    "cell_type": "markdown",
-   "id": "ea2204e1",
+   "id": "3e7c6e0f",
    "metadata": {
     "papermill": {
-     "duration": 0.007309,
-     "end_time": "2024-06-03T00:03:07.855345",
+     "duration": 0.022891,
+     "end_time": "2024-06-03T04:19:36.898419",
      "exception": false,
-     "start_time": "2024-06-03T00:03:07.848036",
+     "start_time": "2024-06-03T04:19:36.875528",
      "status": "completed"
     },
     "tags": []
@@ -194,21 +226,38 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "id": "b0c1930d",
+   "metadata": {
+    "papermill": {
+     "duration": 0.02292,
+     "end_time": "2024-06-03T04:19:36.945326",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:36.922406",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "We want to look at our data dimensions, feature count and understand the type of data in our data set. We can do this by observing the first 5 rows of these data."
+   ]
+  },
+  {
    "cell_type": "code",
    "execution_count": 3,
-   "id": "95451a78",
+   "id": "37fbe4f8",
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-06-03T00:03:07.872704Z",
-     "iopub.status.busy": "2024-06-03T00:03:07.872271Z",
-     "iopub.status.idle": "2024-06-03T00:03:07.922081Z",
-     "shell.execute_reply": "2024-06-03T00:03:07.920805Z"
+     "iopub.execute_input": "2024-06-03T04:19:36.993951Z",
+     "iopub.status.busy": "2024-06-03T04:19:36.993449Z",
+     "iopub.status.idle": "2024-06-03T04:19:37.048214Z",
+     "shell.execute_reply": "2024-06-03T04:19:37.046679Z"
     },
     "papermill": {
-     "duration": 0.061885,
-     "end_time": "2024-06-03T00:03:07.924892",
+     "duration": 0.08277,
+     "end_time": "2024-06-03T04:19:37.051346",
      "exception": false,
-     "start_time": "2024-06-03T00:03:07.863007",
+     "start_time": "2024-06-03T04:19:36.968576",
      "status": "completed"
     },
     "tags": []
@@ -283,37 +332,37 @@
   },
   {
    "cell_type": "markdown",
-   "id": "7a6c979f",
+   "id": "b4524272",
    "metadata": {
     "papermill": {
-     "duration": 0.007403,
-     "end_time": "2024-06-03T00:03:07.939766",
+     "duration": 0.024586,
+     "end_time": "2024-06-03T04:19:37.099744",
      "exception": false,
-     "start_time": "2024-06-03T00:03:07.932363",
+     "start_time": "2024-06-03T04:19:37.075158",
      "status": "completed"
     },
     "tags": []
    },
    "source": [
-    "There is a count of 1800 values in the training data set."
+    "There is a count of 1800 values in the training data set. We have two columns, one named \"Content\" and the other named, \"Label\". We can note, at this point, we have text data for the Content (representing the review) and a Label determining the positive or negative sentiment of each review."
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 4,
-   "id": "f202be74",
+   "id": "4880aae8",
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-06-03T00:03:07.957531Z",
-     "iopub.status.busy": "2024-06-03T00:03:07.957114Z",
-     "iopub.status.idle": "2024-06-03T00:03:07.972728Z",
-     "shell.execute_reply": "2024-06-03T00:03:07.971314Z"
+     "iopub.execute_input": "2024-06-03T04:19:37.151469Z",
+     "iopub.status.busy": "2024-06-03T04:19:37.150291Z",
+     "iopub.status.idle": "2024-06-03T04:19:37.167685Z",
+     "shell.execute_reply": "2024-06-03T04:19:37.166324Z"
     },
     "papermill": {
-     "duration": 0.028184,
-     "end_time": "2024-06-03T00:03:07.975279",
+     "duration": 0.046176,
+     "end_time": "2024-06-03T04:19:37.170255",
      "exception": false,
-     "start_time": "2024-06-03T00:03:07.947095",
+     "start_time": "2024-06-03T04:19:37.124079",
      "status": "completed"
     },
     "tags": []
@@ -388,13 +437,13 @@
   },
   {
    "cell_type": "markdown",
-   "id": "3a2e09b5",
+   "id": "ad8a63f1",
    "metadata": {
     "papermill": {
-     "duration": 0.007126,
-     "end_time": "2024-06-03T00:03:07.989968",
+     "duration": 0.023433,
+     "end_time": "2024-06-03T04:19:37.217821",
      "exception": false,
-     "start_time": "2024-06-03T00:03:07.982842",
+     "start_time": "2024-06-03T04:19:37.194388",
      "status": "completed"
     },
     "tags": []
@@ -406,19 +455,19 @@
   {
    "cell_type": "code",
    "execution_count": 5,
-   "id": "250b4907",
+   "id": "c900f7cd",
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-06-03T00:03:08.008680Z",
-     "iopub.status.busy": "2024-06-03T00:03:08.007566Z",
-     "iopub.status.idle": "2024-06-03T00:03:08.019714Z",
-     "shell.execute_reply": "2024-06-03T00:03:08.018211Z"
+     "iopub.execute_input": "2024-06-03T04:19:37.269018Z",
+     "iopub.status.busy": "2024-06-03T04:19:37.268615Z",
+     "iopub.status.idle": "2024-06-03T04:19:37.281052Z",
+     "shell.execute_reply": "2024-06-03T04:19:37.279690Z"
     },
     "papermill": {
-     "duration": 0.024977,
-     "end_time": "2024-06-03T00:03:08.022381",
+     "duration": 0.041179,
+     "end_time": "2024-06-03T04:19:37.283656",
      "exception": false,
-     "start_time": "2024-06-03T00:03:07.997404",
+     "start_time": "2024-06-03T04:19:37.242477",
      "status": "completed"
     },
     "tags": []
@@ -498,21 +547,38 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "id": "2bd4b970",
+   "metadata": {
+    "papermill": {
+     "duration": 0.023281,
+     "end_time": "2024-06-03T04:19:37.331210",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:37.307929",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Here, we see that \"pos\" and \"neg\" are the labels used to describe the prescribed sentiment. Our text data is large enough that we cannot manually assign numberic values (in later steps), so we can already determine we will be dependent on python's built in libraries that expidite the classficiation process."
+   ]
+  },
+  {
    "cell_type": "code",
    "execution_count": 6,
-   "id": "80f8c4bb",
+   "id": "bfe0cd53",
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-06-03T00:03:08.040735Z",
-     "iopub.status.busy": "2024-06-03T00:03:08.039968Z",
-     "iopub.status.idle": "2024-06-03T00:03:08.051172Z",
-     "shell.execute_reply": "2024-06-03T00:03:08.049904Z"
+     "iopub.execute_input": "2024-06-03T04:19:37.380261Z",
+     "iopub.status.busy": "2024-06-03T04:19:37.379571Z",
+     "iopub.status.idle": "2024-06-03T04:19:37.390390Z",
+     "shell.execute_reply": "2024-06-03T04:19:37.389460Z"
     },
     "papermill": {
-     "duration": 0.023501,
-     "end_time": "2024-06-03T00:03:08.054108",
+     "duration": 0.038352,
+     "end_time": "2024-06-03T04:19:37.392789",
      "exception": false,
-     "start_time": "2024-06-03T00:03:08.030607",
+     "start_time": "2024-06-03T04:19:37.354437",
      "status": "completed"
     },
     "tags": []
@@ -593,30 +659,30 @@
   },
   {
    "cell_type": "markdown",
-   "id": "69b22eb3",
+   "id": "220eca33",
    "metadata": {
     "papermill": {
-     "duration": 0.008242,
-     "end_time": "2024-06-03T00:03:08.070488",
+     "duration": 0.023493,
+     "end_time": "2024-06-03T04:19:37.440472",
      "exception": false,
-     "start_time": "2024-06-03T00:03:08.062246",
+     "start_time": "2024-06-03T04:19:37.416979",
      "status": "completed"
     },
     "tags": []
    },
    "source": [
-    "We can see that our data is text data (to be expected), and there are two columns. The label columns assigns the polarirt (positive or negative reviews) for the movie review, and the text column provides the original human text describing the reviewers opinions."
+    "We can see that our data included text data - the reviews (to be expected)- and there are two columns, total. The label columns assigns the polarity (positive or negative reviews) for the movie, and the text column provides the original human text capturing the reviewer's opinion. We are ready to start pre-processing our data."
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "d86d0011",
+   "id": "ae5162da",
    "metadata": {
     "papermill": {
-     "duration": 0.007714,
-     "end_time": "2024-06-03T00:03:08.086393",
+     "duration": 0.024732,
+     "end_time": "2024-06-03T04:19:37.489228",
      "exception": false,
-     "start_time": "2024-06-03T00:03:08.078679",
+     "start_time": "2024-06-03T04:19:37.464496",
      "status": "completed"
     },
     "tags": []
@@ -627,140 +693,1935 @@
   },
   {
    "cell_type": "markdown",
-   "id": "33c80090",
+   "id": "ae8ec748",
    "metadata": {
     "papermill": {
-     "duration": 0.007641,
-     "end_time": "2024-06-03T00:03:08.102000",
+     "duration": 0.023416,
+     "end_time": "2024-06-03T04:19:37.536418",
      "exception": false,
-     "start_time": "2024-06-03T00:03:08.094359",
+     "start_time": "2024-06-03T04:19:37.513002",
      "status": "completed"
     },
     "tags": []
    },
    "source": [
-    "Sentiment analysis problems often require raw data in the form of text - think Yelp reviews, google reviews, movie reviews all of which subtly express the nuances in human discord. Sentiment analysis is a classification task,meaning the preprocessing steps include feature vectors translated into what is known as a \"bag of words\". \n",
+    "Sentiment analysis problems often require raw data in the form of text - like we see with our movie review train and test data - which we will use to generate a a **corpus** (a collection of documents). Other examples include; Yelp reviews, google reviews, and air bnb reviews - all of which subtly express the nuances in human discord and preferences. \n",
     "\n",
-    "Classifications for sentiment analysis commonly relay on \"normalized\" form of the frequencies, known as the **Term Frequency** - Inverse Document Frequency (TF-IDF). These applications are accessed in the "
+    "Sentiment analysis is a classification task, meaning the preprocessing steps must include feature vectors segregated into a \"bag of words\", and assigned meaning (i.e. good or bad).\n",
+    "\n",
+    "Classifications for sentiment analysis commonly relay on \"normalized\" form of the frequencies, known as the **Term Frequency** - Inverse Document Frequency (TF-IDF). These applications are accessed in the sklearn library in python (as we see in our Notebook). In this step, we need to \"send our computer to school\" and \"teach it how to read\". Essentially, we are assigning classifiers to these data in order to generate a descrenable output in regards to predictive metrics. This is a basic step in Natural Language Processing (NLP) ML. Although we cannot witness the full extent of this classification process using the SkLearn package, I have included an example of a simplfied step-by-step coding process for the numeric classification assignments."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1ae08ce9",
+   "metadata": {
+    "papermill": {
+     "duration": 0.023396,
+     "end_time": "2024-06-03T04:19:37.584214",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:37.560818",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "**Our first step is to transform our raw training data set into a useable, computationally translatable set of TF-IDF vectors.**\n",
+    "\n",
+    "TF-IDF vectors are an \"amenable\" approach to examine words of importance in text data. As mentioned, the SkLearn \"TfidfVectorizerLinks\" provides a simple API for transforming text into TF-IDF vectors. These vectors are immediately prepped for training. The TfidfVectorizer \"compresses\" the previously exemplified data matrix into a highly efficient internal format. \n",
+    "\n",
+    "This process includes internal columns representing features (possible words) and rows which are the TF-IDF vector, assigned a non-zero number - a conceptual breakdown of the process. However, the TfidfVectorizer does not display the optimization steps. We can't see every step occurring in the process, but we can implement check points to ensure our model is operational and optimizing using additional steps outlined in this Notebook. \n",
+    "\n",
+    "The end product for this step includes TF-IDF vectors, ready for training."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "cfb086fa",
+   "execution_count": 7,
+   "id": "c6fb46a9",
    "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:37.638903Z",
+     "iopub.status.busy": "2024-06-03T04:19:37.638189Z",
+     "iopub.status.idle": "2024-06-03T04:19:39.245042Z",
+     "shell.execute_reply": "2024-06-03T04:19:39.243699Z"
+    },
     "papermill": {
-     "duration": 0.008169,
-     "end_time": "2024-06-03T00:03:08.118085",
+     "duration": 1.636169,
+     "end_time": "2024-06-03T04:19:39.248215",
      "exception": false,
-     "start_time": "2024-06-03T00:03:08.109916",
+     "start_time": "2024-06-03T04:19:37.612046",
      "status": "completed"
     },
     "tags": []
    },
    "outputs": [],
-   "source": []
+   "source": [
+    "vectorizer = TfidfVectorizer(min_df = 1, max_df = 1.0, sublinear_tf = True, use_idf = True)\n",
+    "training_vectors = vectorizer.fit_transform(reviews_training['Content'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "64cbce9c",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:39.303981Z",
+     "iopub.status.busy": "2024-06-03T04:19:39.303163Z",
+     "iopub.status.idle": "2024-06-03T04:19:39.310985Z",
+     "shell.execute_reply": "2024-06-03T04:19:39.309983Z"
+    },
+    "papermill": {
+     "duration": 0.036831,
+     "end_time": "2024-06-03T04:19:39.313424",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:39.276593",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(1800, 37987)"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "training_vectors.shape"
+   ]
   },
   {
    "cell_type": "markdown",
-   "id": "4a42a0eb",
+   "id": "febb4fe6",
    "metadata": {
     "papermill": {
-     "duration": 0.008095,
-     "end_time": "2024-06-03T00:03:08.134699",
+     "duration": 0.024133,
+     "end_time": "2024-06-03T04:19:39.362207",
      "exception": false,
-     "start_time": "2024-06-03T00:03:08.126604",
+     "start_time": "2024-06-03T04:19:39.338074",
      "status": "completed"
     },
     "tags": []
    },
    "source": [
-    "## Step 5: Model Validation"
+    "It appears all 1800 counts are included with the new number assignments."
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "0a287ca2",
+   "id": "2d67adbf",
    "metadata": {
     "papermill": {
-     "duration": 0.00829,
-     "end_time": "2024-06-03T00:03:08.152189",
+     "duration": 0.024058,
+     "end_time": "2024-06-03T04:19:39.410188",
      "exception": false,
-     "start_time": "2024-06-03T00:03:08.143899",
+     "start_time": "2024-06-03T04:19:39.386130",
      "status": "completed"
     },
     "tags": []
    },
    "source": [
-    "## Step 6: Predications"
+    "Now, lets' inspect our training set using a matrix showing the indices and features, ensurins the classification labels are now assigned a numeric value, and theTfidVectorizer function reduced our data to only words of special importance. This code chunk was used to examine the vocabulary, but I have commented it out because it takes up a lot of space and is not necessary for the official workflow of the analysis. Though, it is nice to use while exploring these data."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "8d8f53e6",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:39.461425Z",
+     "iopub.status.busy": "2024-06-03T04:19:39.460523Z",
+     "iopub.status.idle": "2024-06-03T04:19:39.465226Z",
+     "shell.execute_reply": "2024-06-03T04:19:39.464374Z"
+    },
+    "papermill": {
+     "duration": 0.032918,
+     "end_time": "2024-06-03T04:19:39.467378",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:39.434460",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "#non_zero_elements = training_vectors.nonzero()\n",
+    "#rows = non_zero_elements[0]\n",
+    "#cols = non_zero_elements[1]\n",
+    "#values = training_vectors.data\n",
+    "\n",
+    "#non-zero elements\n",
+    "#for row, col, value in zip(rows, cols, values):\n",
+    "    #f\"({row}, {col})\\t{value}\"\n",
+    "\n",
+    "# features and indices\n",
+    "#feature_names = vectorizer.vocabulary_\n",
+    "#feature_names"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "32a2a428",
+   "id": "e11e0b61",
    "metadata": {
     "papermill": {
-     "duration": 0.008599,
-     "end_time": "2024-06-03T00:03:08.169220",
+     "duration": 0.023256,
+     "end_time": "2024-06-03T04:19:39.514913",
      "exception": false,
-     "start_time": "2024-06-03T00:03:08.160621",
+     "start_time": "2024-06-03T04:19:39.491657",
      "status": "completed"
     },
     "tags": []
    },
    "source": [
-    "## Step 7: Adjusting the Model"
+    "It looks good!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "665b7be0",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:39.566634Z",
+     "iopub.status.busy": "2024-06-03T04:19:39.565701Z",
+     "iopub.status.idle": "2024-06-03T04:19:39.572645Z",
+     "shell.execute_reply": "2024-06-03T04:19:39.571750Z"
+    },
+    "papermill": {
+     "duration": 0.035694,
+     "end_time": "2024-06-03T04:19:39.574801",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:39.539107",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(1800, 37987)"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "training_vectors.shape # n samples, n features"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "d6eb0a65",
+   "id": "345569d1",
    "metadata": {
     "papermill": {
-     "duration": 0.008674,
-     "end_time": "2024-06-03T00:03:08.185913",
+     "duration": 0.02402,
+     "end_time": "2024-06-03T04:19:39.623789",
      "exception": false,
-     "start_time": "2024-06-03T00:03:08.177239",
+     "start_time": "2024-06-03T04:19:39.599769",
      "status": "completed"
     },
     "tags": []
    },
    "source": [
-    "## Step 8: Model Validation"
+    "I'm checking the shape of the output file. It appears we have 4 samples total, and 9 features left after creating our TF-IDF vectors."
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "d85936c1",
+   "id": "5ec23d18",
    "metadata": {
     "papermill": {
-     "duration": 0.008292,
-     "end_time": "2024-06-03T00:03:08.202259",
+     "duration": 0.024198,
+     "end_time": "2024-06-03T04:19:39.672658",
      "exception": false,
-     "start_time": "2024-06-03T00:03:08.193967",
+     "start_time": "2024-06-03T04:19:39.648460",
      "status": "completed"
     },
     "tags": []
    },
    "source": [
-    "## Step 9: Hyperparameter Experiementation"
+    "## ***If we break this down simply, set-by-step, opposed to relaying on python's sklearn library, this is essentially how we are assigning the numeric values to each word in the content or review.***"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "6184bbd2",
+   "id": "12c82a88",
    "metadata": {
     "papermill": {
-     "duration": 0.007762,
-     "end_time": "2024-06-03T00:03:08.218245",
+     "duration": 0.024674,
+     "end_time": "2024-06-03T04:19:39.721549",
      "exception": false,
-     "start_time": "2024-06-03T00:03:08.210483",
+     "start_time": "2024-06-03T04:19:39.696875",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "##  A Simplified Example"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a9664b56",
+   "metadata": {
+    "papermill": {
+     "duration": 0.023568,
+     "end_time": "2024-06-03T04:19:39.769372",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:39.745804",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "### Corpus \"Bag of Words\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "8d393baf",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:39.820032Z",
+     "iopub.status.busy": "2024-06-03T04:19:39.819137Z",
+     "iopub.status.idle": "2024-06-03T04:19:39.824148Z",
+     "shell.execute_reply": "2024-06-03T04:19:39.823194Z"
+    },
+    "papermill": {
+     "duration": 0.032884,
+     "end_time": "2024-06-03T04:19:39.826375",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:39.793491",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "docA = \"I like learning Machine Learning\"\n",
+    "docB = \"I don't think I am great at it, but it is still fun\""
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b28f8f71",
+   "metadata": {
+    "papermill": {
+     "duration": 0.023663,
+     "end_time": "2024-06-03T04:19:39.873972",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:39.850309",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "### Tokenizing"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7ee75596",
+   "metadata": {
+    "papermill": {
+     "duration": 0.023645,
+     "end_time": "2024-06-03T04:19:39.921462",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:39.897817",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Tokenizing is when the corpus's \"bag of words\" is split into each individual word, allowing the computer to later determine individual words in their assigned classifier, and prescribe \"good\" or \"bad\" review predictions based on the origin of the singular word's classifier."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "e66c3d41",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:39.972300Z",
+     "iopub.status.busy": "2024-06-03T04:19:39.971376Z",
+     "iopub.status.idle": "2024-06-03T04:19:39.976442Z",
+     "shell.execute_reply": "2024-06-03T04:19:39.975555Z"
+    },
+    "papermill": {
+     "duration": 0.033634,
+     "end_time": "2024-06-03T04:19:39.979061",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:39.945427",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "bowA = docA.split()\n",
+    "bowB = docB.split()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "7077eb24",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:40.029870Z",
+     "iopub.status.busy": "2024-06-03T04:19:40.029041Z",
+     "iopub.status.idle": "2024-06-03T04:19:40.035321Z",
+     "shell.execute_reply": "2024-06-03T04:19:40.034405Z"
+    },
+    "papermill": {
+     "duration": 0.034271,
+     "end_time": "2024-06-03T04:19:40.037540",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.003269",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['I', 'like', 'learning', 'Machine', 'Learning']"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "bowA"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d7f9c758",
+   "metadata": {
+    "papermill": {
+     "duration": 0.023909,
+     "end_time": "2024-06-03T04:19:40.085657",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.061748",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "### Creating a Vector for \"Possible Words\" in each Bag of Words"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e1b6b87d",
+   "metadata": {
+    "papermill": {
+     "duration": 0.023747,
+     "end_time": "2024-06-03T04:19:40.133864",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.110117",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "When we create a vector for the tolkenized bag of words, we are able to turn these words into number assignments."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "479f2ff9",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:40.186248Z",
+     "iopub.status.busy": "2024-06-03T04:19:40.185350Z",
+     "iopub.status.idle": "2024-06-03T04:19:40.190465Z",
+     "shell.execute_reply": "2024-06-03T04:19:40.189438Z"
+    },
+    "papermill": {
+     "duration": 0.033313,
+     "end_time": "2024-06-03T04:19:40.192789",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.159476",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "wordSet= set(bowA).union(set(bowB))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "379591a8",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:40.243831Z",
+     "iopub.status.busy": "2024-06-03T04:19:40.243000Z",
+     "iopub.status.idle": "2024-06-03T04:19:40.249688Z",
+     "shell.execute_reply": "2024-06-03T04:19:40.248714Z"
+    },
+    "papermill": {
+     "duration": 0.034592,
+     "end_time": "2024-06-03T04:19:40.251810",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.217218",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'I',\n",
+       " 'Learning',\n",
+       " 'Machine',\n",
+       " 'am',\n",
+       " 'at',\n",
+       " 'but',\n",
+       " \"don't\",\n",
+       " 'fun',\n",
+       " 'great',\n",
+       " 'is',\n",
+       " 'it',\n",
+       " 'it,',\n",
+       " 'learning',\n",
+       " 'like',\n",
+       " 'still',\n",
+       " 'think'}"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#all words in all bags/documents\n",
+    "wordSet"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "359043f9",
+   "metadata": {
+    "papermill": {
+     "duration": 0.02407,
+     "end_time": "2024-06-03T04:19:40.302102",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.278032",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Next, I want to create a dictionary to maintain the word counts."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "6f8ce116",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:40.353688Z",
+     "iopub.status.busy": "2024-06-03T04:19:40.353198Z",
+     "iopub.status.idle": "2024-06-03T04:19:40.359825Z",
+     "shell.execute_reply": "2024-06-03T04:19:40.358337Z"
+    },
+    "papermill": {
+     "duration": 0.035479,
+     "end_time": "2024-06-03T04:19:40.362724",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.327245",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "wordDictA = dict.fromkeys(wordSet, 0)\n",
+    "wordDictB= dict.fromkeys(wordSet, 0)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f7531aad",
+   "metadata": {
+    "papermill": {
+     "duration": 0.024796,
+     "end_time": "2024-06-03T04:19:40.412892",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.388096",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "I want to glimpse at these to make sure parsing is effective, and each \"bag of words\" word has an assigned a classifcation number."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "8b8c91a7",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:40.465889Z",
+     "iopub.status.busy": "2024-06-03T04:19:40.465424Z",
+     "iopub.status.idle": "2024-06-03T04:19:40.473392Z",
+     "shell.execute_reply": "2024-06-03T04:19:40.472099Z"
+    },
+    "papermill": {
+     "duration": 0.037181,
+     "end_time": "2024-06-03T04:19:40.475810",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.438629",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'am': 0,\n",
+       " 'Learning': 0,\n",
+       " 'it': 0,\n",
+       " 'still': 0,\n",
+       " 'learning': 0,\n",
+       " 'but': 0,\n",
+       " 'is': 0,\n",
+       " 'at': 0,\n",
+       " \"don't\": 0,\n",
+       " 'I': 0,\n",
+       " 'great': 0,\n",
+       " 'Machine': 0,\n",
+       " 'it,': 0,\n",
+       " 'think': 0,\n",
+       " 'fun': 0,\n",
+       " 'like': 0}"
+      ]
+     },
+     "execution_count": 17,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#taking a look\n",
+    "wordDictA"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "b01c8f93",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:40.528694Z",
+     "iopub.status.busy": "2024-06-03T04:19:40.528294Z",
+     "iopub.status.idle": "2024-06-03T04:19:40.536374Z",
+     "shell.execute_reply": "2024-06-03T04:19:40.535102Z"
+    },
+    "papermill": {
+     "duration": 0.037569,
+     "end_time": "2024-06-03T04:19:40.539261",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.501692",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'am': 0,\n",
+       " 'Learning': 0,\n",
+       " 'it': 0,\n",
+       " 'still': 0,\n",
+       " 'learning': 0,\n",
+       " 'but': 0,\n",
+       " 'is': 0,\n",
+       " 'at': 0,\n",
+       " \"don't\": 0,\n",
+       " 'I': 0,\n",
+       " 'great': 0,\n",
+       " 'Machine': 0,\n",
+       " 'it,': 0,\n",
+       " 'think': 0,\n",
+       " 'fun': 0,\n",
+       " 'like': 0}"
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#taking a look\n",
+    "wordDictB"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "41158752",
+   "metadata": {
+    "papermill": {
+     "duration": 0.025187,
+     "end_time": "2024-06-03T04:19:40.590087",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.564900",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "We want to count the words in the bags, because understanding size is advantageous for later training our SVM (linear classifier)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "id": "e8b3999f",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:40.644433Z",
+     "iopub.status.busy": "2024-06-03T04:19:40.643971Z",
+     "iopub.status.idle": "2024-06-03T04:19:40.650169Z",
+     "shell.execute_reply": "2024-06-03T04:19:40.648685Z"
+    },
+    "papermill": {
+     "duration": 0.036492,
+     "end_time": "2024-06-03T04:19:40.652916",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.616424",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "#counting each word in the bags\n",
+    "for word in bowA:\n",
+    "    wordDictA[word] +=1\n",
+    "    \n",
+    "for word in bowB:\n",
+    "    wordDictB[word] +=1"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e69c024e",
+   "metadata": {
+    "papermill": {
+     "duration": 0.025098,
+     "end_time": "2024-06-03T04:19:40.706894",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.681796",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Our last step is using a matrix, this enables us to view our word and number classifiers, easily. This turns a word problem, and generates a linear algebra problem, instead. This is far better for computer comprehension. However, it is critical to note that this strategy leaves our analysis vulnerable to including counts of words that simply do not contain a lot of information, becuase the approach includes all possible words from the movie review. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "id": "e0e84008",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:40.760066Z",
+     "iopub.status.busy": "2024-06-03T04:19:40.759574Z",
+     "iopub.status.idle": "2024-06-03T04:19:40.776469Z",
+     "shell.execute_reply": "2024-06-03T04:19:40.775636Z"
+    },
+    "papermill": {
+     "duration": 0.046345,
+     "end_time": "2024-06-03T04:19:40.778712",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.732367",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>am</th>\n",
+       "      <th>Learning</th>\n",
+       "      <th>it</th>\n",
+       "      <th>still</th>\n",
+       "      <th>learning</th>\n",
+       "      <th>but</th>\n",
+       "      <th>is</th>\n",
+       "      <th>at</th>\n",
+       "      <th>don't</th>\n",
+       "      <th>I</th>\n",
+       "      <th>great</th>\n",
+       "      <th>Machine</th>\n",
+       "      <th>it,</th>\n",
+       "      <th>think</th>\n",
+       "      <th>fun</th>\n",
+       "      <th>like</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>2</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   am  Learning  it  still  learning  but  is  at  don't  I  great  Machine  \\\n",
+       "0   0         1   0      0         1    0   0   0      0  1      0        1   \n",
+       "1   1         0   1      1         0    1   1   1      1  2      1        0   \n",
+       "\n",
+       "   it,  think  fun  like  \n",
+       "0    0      0    0     1  \n",
+       "1    1      1    1     0  "
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#matrix time\n",
+    "pd.DataFrame([wordDictA, wordDictB])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c0ffe630",
+   "metadata": {
+    "papermill": {
+     "duration": 0.026787,
+     "end_time": "2024-06-03T04:19:40.831534",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.804747",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "*The above code is a simplified break down of the steps required for assigning numeric values to each bag of words - helping us better conceptualize the process behind the simplfied code lines.*\n",
+    "\n",
+    "It's important to understand method comparisions, and why the **TF-IDF** strategy is supervior. TF-IDF eliminates the common words in English - those words frequently do not enhance our understanding of the underlying polarity in the review message. Using the Power Law Distribution (the distribution of words). So, instead of just \"counting\" all of the words - we want to use the TF-IDF score of a word: tf(w)*idf(w)\n",
+    "\n",
+    "where **tf(w) = (Number of times the word appears in a document) / (Total number of words in the document)**\n",
+    "and where **idf(w) = log(Number of documents /Number of documents that contain word w)**\n",
+    "\n",
+    "*Of course, there is a step-by-step breakdown for the application of TF-IDF, but for time's sake, we jumped straight into using python's SkLearn operative functions to work through the rest of our analysis.*\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4b789d27",
+   "metadata": {
+    "papermill": {
+     "duration": 0.024587,
+     "end_time": "2024-06-03T04:19:40.883614",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.859027",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 5: Applying a SVM (linear classifier)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "983dfaa7",
+   "metadata": {
+    "papermill": {
+     "duration": 0.024548,
+     "end_time": "2024-06-03T04:19:40.933075",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.908527",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "The SkLearn fit methods we apply to our new classifiers accept efficient internal forms generating our ultimate training data. TfidfVectorizer performs the majority of the baseline effort, transforming the corpus of text data into TF-IDF vectors. These resulting TF-IDF vectors are immediately prepped for training."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "id": "9cbb0db5",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:40.985407Z",
+     "iopub.status.busy": "2024-06-03T04:19:40.984956Z",
+     "iopub.status.idle": "2024-06-03T04:19:53.026306Z",
+     "shell.execute_reply": "2024-06-03T04:19:53.025095Z"
+    },
+    "papermill": {
+     "duration": 12.071204,
+     "end_time": "2024-06-03T04:19:53.029020",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:40.957816",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<style>#sk-container-id-1 {color: black;background-color: white;}#sk-container-id-1 pre{padding: 0;}#sk-container-id-1 div.sk-toggleable {background-color: white;}#sk-container-id-1 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-1 label.sk-toggleable__label-arrow:before {content: \"▸\";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-1 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-1 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: \"▾\";}#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-1 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-1 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-1 div.sk-parallel-item::after {content: \"\";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-serial::before {content: \"\";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-1 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-1 div.sk-item {position: relative;z-index: 1;}#sk-container-id-1 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {content: \"\";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-1 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-1 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-1 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-1 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-1 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-1 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-1 div.sk-label-container {text-align: center;}#sk-container-id-1 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-1 div.sk-text-repr-fallback {display: none;}</style><div id=\"sk-container-id-1\" class=\"sk-top-container\"><div class=\"sk-text-repr-fallback\"><pre>SVC()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class=\"sk-container\" hidden><div class=\"sk-item\"><div class=\"sk-estimator sk-toggleable\"><input class=\"sk-toggleable__control sk-hidden--visually\" id=\"sk-estimator-id-1\" type=\"checkbox\" checked><label for=\"sk-estimator-id-1\" class=\"sk-toggleable__label sk-toggleable__label-arrow\">SVC</label><div class=\"sk-toggleable__content\"><pre>SVC()</pre></div></div></div></div></div>"
+      ],
+      "text/plain": [
+       "SVC()"
+      ]
+     },
+     "execution_count": 21,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "classifier = svm.SVC()\n",
+    "classifier.fit(training_vectors, reviews_training['Label'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d4161667",
+   "metadata": {
+    "papermill": {
+     "duration": 0.027096,
+     "end_time": "2024-06-03T04:19:53.082964",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:53.055868",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Let's **instantiate** our new SVC, knowing it is automated with a default SkLearn SVM hyperparameters. We immediately recognize that the default hyperparameters may require adjustments to fit our specific data, which can be addressed after model validation. We're creating the training vectors using the assigned sentiment \"Labels\" from our movie review dataset."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "eaf3265f",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:53.137265Z",
+     "iopub.status.busy": "2024-06-03T04:19:53.136828Z",
+     "iopub.status.idle": "2024-06-03T04:19:54.727416Z",
+     "shell.execute_reply": "2024-06-03T04:19:54.726417Z"
+    },
+    "papermill": {
+     "duration": 1.621224,
+     "end_time": "2024-06-03T04:19:54.730408",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:53.109184",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "vectorizer = TfidfVectorizer(min_df = 1, max_df = 1.0, sublinear_tf = True, use_idf = True)\n",
+    "training_vectors = vectorizer.fit_transform(reviews_training['Content'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "189f689d",
+   "metadata": {
+    "papermill": {
+     "duration": 0.02476,
+     "end_time": "2024-06-03T04:19:54.781237",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:54.756477",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Great! We have our default SVM applied to our transformed data."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "681d7d56",
+   "metadata": {
+    "papermill": {
+     "duration": 0.024686,
+     "end_time": "2024-06-03T04:19:54.831325",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:54.806639",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "For **Step 5**, we instantiated a default SVM, and trained it with our training vectors and the polarized \"labels\". This was trained using the original training set. To validate our SVM, we need to examine the accuracy score output. But, it is advantegous to validate using a complete test set, particularly because we have corpus \"reviews_test\" data containing *Content* (i.e. Reviews) and *Labels* (i.e. sentiment). \n",
+    "\n",
+    "We need to transform our reviews_test data into TF-IDF vectors."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "2427930e",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:54.884878Z",
+     "iopub.status.busy": "2024-06-03T04:19:54.883613Z",
+     "iopub.status.idle": "2024-06-03T04:19:55.062511Z",
+     "shell.execute_reply": "2024-06-03T04:19:55.061412Z"
+    },
+    "papermill": {
+     "duration": 0.208723,
+     "end_time": "2024-06-03T04:19:55.065281",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:54.856558",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "test_vectors = vectorizer.transform(reviews_test['Content'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "8d206bb2",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:55.118343Z",
+     "iopub.status.busy": "2024-06-03T04:19:55.117569Z",
+     "iopub.status.idle": "2024-06-03T04:19:55.332245Z",
+     "shell.execute_reply": "2024-06-03T04:19:55.331297Z"
+    },
+    "papermill": {
+     "duration": 0.244635,
+     "end_time": "2024-06-03T04:19:55.335213",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:55.090578",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "vectorizer = TfidfVectorizer(min_df = 1, max_df = 1.0, sublinear_tf = True, use_idf = True)\n",
+    "testing_vectors = vectorizer.fit_transform(reviews_test['Content'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "44593370",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:55.406483Z",
+     "iopub.status.busy": "2024-06-03T04:19:55.405731Z",
+     "iopub.status.idle": "2024-06-03T04:19:55.411793Z",
+     "shell.execute_reply": "2024-06-03T04:19:55.410957Z"
+    },
+    "papermill": {
+     "duration": 0.042173,
+     "end_time": "2024-06-03T04:19:55.414729",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:55.372556",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(200, 13872)"
+      ]
+     },
+     "execution_count": 25,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "testing_vectors.shape"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a6313087",
+   "metadata": {
+    "papermill": {
+     "duration": 0.027502,
+     "end_time": "2024-06-03T04:19:55.474902",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:55.447400",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Done! As expected, our test data is smaller and comprised of (200,13872) dimensions, compared to our training data that reported (1800, 37987)."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "842c3c7f",
+   "metadata": {
+    "papermill": {
+     "duration": 0.026984,
+     "end_time": "2024-06-03T04:19:55.529032",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:55.502048",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Now, let's attempt to apply the same SVM model to the test data."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "148c1e56",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:55.586093Z",
+     "iopub.status.busy": "2024-06-03T04:19:55.585456Z",
+     "iopub.status.idle": "2024-06-03T04:19:55.747264Z",
+     "shell.execute_reply": "2024-06-03T04:19:55.746157Z"
+    },
+    "papermill": {
+     "duration": 0.193728,
+     "end_time": "2024-06-03T04:19:55.749737",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:55.556009",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<style>#sk-container-id-2 {color: black;background-color: white;}#sk-container-id-2 pre{padding: 0;}#sk-container-id-2 div.sk-toggleable {background-color: white;}#sk-container-id-2 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-2 label.sk-toggleable__label-arrow:before {content: \"▸\";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-2 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-2 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-2 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: \"▾\";}#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-2 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-2 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-2 div.sk-parallel-item::after {content: \"\";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 div.sk-serial::before {content: \"\";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-2 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-2 div.sk-item {position: relative;z-index: 1;}#sk-container-id-2 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-2 div.sk-item::before, #sk-container-id-2 div.sk-parallel-item::before {content: \"\";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-2 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-2 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-2 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-2 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-2 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-2 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-2 div.sk-label-container {text-align: center;}#sk-container-id-2 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-2 div.sk-text-repr-fallback {display: none;}</style><div id=\"sk-container-id-2\" class=\"sk-top-container\"><div class=\"sk-text-repr-fallback\"><pre>SVC()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class=\"sk-container\" hidden><div class=\"sk-item\"><div class=\"sk-estimator sk-toggleable\"><input class=\"sk-toggleable__control sk-hidden--visually\" id=\"sk-estimator-id-2\" type=\"checkbox\" checked><label for=\"sk-estimator-id-2\" class=\"sk-toggleable__label sk-toggleable__label-arrow\">SVC</label><div class=\"sk-toggleable__content\"><pre>SVC()</pre></div></div></div></div></div>"
+      ],
+      "text/plain": [
+       "SVC()"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "classifier = svm.SVC()\n",
+    "classifier.fit(testing_vectors, reviews_test['Label'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "9f4ff303",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:55.805695Z",
+     "iopub.status.busy": "2024-06-03T04:19:55.805262Z",
+     "iopub.status.idle": "2024-06-03T04:19:56.015324Z",
+     "shell.execute_reply": "2024-06-03T04:19:56.013656Z"
+    },
+    "papermill": {
+     "duration": 0.241952,
+     "end_time": "2024-06-03T04:19:56.018953",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:55.777001",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "vectorizer = TfidfVectorizer(min_df = 1, max_df = 1.0, sublinear_tf = True, use_idf = True)\n",
+    "testing_vectors = vectorizer.fit_transform(reviews_test['Content'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d949aa4c",
+   "metadata": {
+    "papermill": {
+     "duration": 0.026974,
+     "end_time": "2024-06-03T04:19:56.074203",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:56.047229",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Now that we have our test data in the SVM linear classifier, let us explore predictive outcomes with the default settings."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1dce5a68",
+   "metadata": {
+    "papermill": {
+     "duration": 0.026461,
+     "end_time": "2024-06-03T04:19:56.127908",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:56.101447",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 6: Inital Predictions"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "996af4ff",
+   "metadata": {
+    "papermill": {
+     "duration": 0.026871,
+     "end_time": "2024-06-03T04:19:56.181285",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:56.154414",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Let's have fun (work can be fun) and create predictions with our default SVM. I am anticipating the hyperparameters will require adjustments, but let's explore outputs before changing anything. We start with generating a collection of predictied sentiment labels."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "b2832567",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:56.237602Z",
+     "iopub.status.busy": "2024-06-03T04:19:56.237146Z",
+     "iopub.status.idle": "2024-06-03T04:19:56.407508Z",
+     "shell.execute_reply": "2024-06-03T04:19:56.405966Z"
+    },
+    "papermill": {
+     "duration": 0.201341,
+     "end_time": "2024-06-03T04:19:56.410477",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:56.209136",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "predictions = classifier.predict(testing_vectors)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "9f7edc4d",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:56.465366Z",
+     "iopub.status.busy": "2024-06-03T04:19:56.464926Z",
+     "iopub.status.idle": "2024-06-03T04:19:56.474167Z",
+     "shell.execute_reply": "2024-06-03T04:19:56.472630Z"
+    },
+    "papermill": {
+     "duration": 0.039951,
+     "end_time": "2024-06-03T04:19:56.476708",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:56.436757",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array(['pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg'], dtype=object)"
+      ]
+     },
+     "execution_count": 29,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "predictions"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "63d55eb0",
+   "metadata": {
+    "papermill": {
+     "duration": 0.026648,
+     "end_time": "2024-06-03T04:19:56.530637",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:56.503989",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Check this out, boss! The SVM appears to be generating predictions for the sentiment labels effectively (postiive and negative review sentiment - i.e. assigned polarity)."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6523e248",
+   "metadata": {
+    "papermill": {
+     "duration": 0.026929,
+     "end_time": "2024-06-03T04:19:56.588305",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:56.561376",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 7: Model Validation"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6e7e2ff0",
+   "metadata": {
+    "papermill": {
+     "duration": 0.027166,
+     "end_time": "2024-06-03T04:19:56.642468",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:56.615302",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Now, let's check a summary of our results, including the **precision**, **recall**, and **f1-score** - this will guide our model tuning and adjustments for optimization."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "1947fd0d",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:56.704193Z",
+     "iopub.status.busy": "2024-06-03T04:19:56.703788Z",
+     "iopub.status.idle": "2024-06-03T04:19:56.731018Z",
+     "shell.execute_reply": "2024-06-03T04:19:56.729624Z"
+    },
+    "papermill": {
+     "duration": 0.061904,
+     "end_time": "2024-06-03T04:19:56.734055",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:56.672151",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Positives:  {'precision': 1.0, 'recall': 1.0, 'f1-score': 1.0, 'support': 100}\n",
+      "Negatives:  {'precision': 1.0, 'recall': 1.0, 'f1-score': 1.0, 'support': 100}\n"
+     ]
+    }
+   ],
+   "source": [
+    "report = classification_report(reviews_test['Label'], predictions, output_dict=True)\n",
+    "print('Positives: ', report['pos'])\n",
+    "print('Negatives: ', report['neg'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "dae6f930",
+   "metadata": {
+    "papermill": {
+     "duration": 0.026926,
+     "end_time": "2024-06-03T04:19:56.789562",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:56.762636",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "When it comes to interpretation of our results, we know that *precision* measures the accuracy of positive predictions (ratio of true postive predcitive to the total positive predictions), *recall* measures the ability of the classifier to ID all positive instances (ratio of true positive over the total actual positives), *f1-score* is the mean of precision and recall, and the *support* value is indicative of number of actual occurances of the positive class in test data.\n",
+    "\n",
+    "All that is to say, our model is performing exceptionally well. This is exemplfied for the classifications (\"pos\" and \"neg\"), and output suggesting **perfect** precision, recall, and F1-score (value of 1.0), with support of 100."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e6f6b5f9",
+   "metadata": {
+    "papermill": {
+     "duration": 0.027492,
+     "end_time": "2024-06-03T04:19:56.843977",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:56.816485",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 8: Model Tuning and Adjustments"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9de2f931",
+   "metadata": {
+    "papermill": {
+     "duration": 0.026372,
+     "end_time": "2024-06-03T04:19:56.897931",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:56.871559",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Although our inital model totally hits the ball out-of-the-park with it's precision, recall, f1-score and support (although I am skeptical that something is wrong, given the perfect output on our default try), I still want to experiment with tuning and adjusting the model. I start with changing the max_df to 3, because this value helps eliminate words that have low frequency. This is a great hyperparameter to tune, because it can help eliminate words that are not frequently used."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "id": "63f87e44",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:56.954974Z",
+     "iopub.status.busy": "2024-06-03T04:19:56.954552Z",
+     "iopub.status.idle": "2024-06-03T04:19:58.571203Z",
+     "shell.execute_reply": "2024-06-03T04:19:58.569823Z"
+    },
+    "papermill": {
+     "duration": 1.64851,
+     "end_time": "2024-06-03T04:19:58.574113",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:56.925603",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "#training set\n",
+    "vectorizer_experiment = TfidfVectorizer(min_df=3, max_df=1.0, sublinear_tf=True, use_idf=True)\n",
+    "training_vectors_experiment = vectorizer.fit_transform(reviews_training['Content'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "id": "7dac89c5",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:58.631685Z",
+     "iopub.status.busy": "2024-06-03T04:19:58.631154Z",
+     "iopub.status.idle": "2024-06-03T04:19:58.826774Z",
+     "shell.execute_reply": "2024-06-03T04:19:58.825175Z"
+    },
+    "papermill": {
+     "duration": 0.226879,
+     "end_time": "2024-06-03T04:19:58.829757",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:58.602878",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "#test set\n",
+    "testing_vectors_experiment = vectorizer_experiment.fit_transform(reviews_test['Content'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "id": "026bee44",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:58.885015Z",
+     "iopub.status.busy": "2024-06-03T04:19:58.884517Z",
+     "iopub.status.idle": "2024-06-03T04:19:59.023849Z",
+     "shell.execute_reply": "2024-06-03T04:19:59.022275Z"
+    },
+    "papermill": {
+     "duration": 0.170382,
+     "end_time": "2024-06-03T04:19:59.026766",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:58.856384",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<style>#sk-container-id-3 {color: black;background-color: white;}#sk-container-id-3 pre{padding: 0;}#sk-container-id-3 div.sk-toggleable {background-color: white;}#sk-container-id-3 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-3 label.sk-toggleable__label-arrow:before {content: \"▸\";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-3 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-3 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-3 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-3 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-3 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-3 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: \"▾\";}#sk-container-id-3 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-3 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-3 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-3 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-3 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-3 div.sk-parallel-item::after {content: \"\";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-3 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-3 div.sk-serial::before {content: \"\";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-3 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-3 div.sk-item {position: relative;z-index: 1;}#sk-container-id-3 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-3 div.sk-item::before, #sk-container-id-3 div.sk-parallel-item::before {content: \"\";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-3 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-3 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-3 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-3 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-3 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-3 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-3 div.sk-label-container {text-align: center;}#sk-container-id-3 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-3 div.sk-text-repr-fallback {display: none;}</style><div id=\"sk-container-id-3\" class=\"sk-top-container\"><div class=\"sk-text-repr-fallback\"><pre>SVC()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class=\"sk-container\" hidden><div class=\"sk-item\"><div class=\"sk-estimator sk-toggleable\"><input class=\"sk-toggleable__control sk-hidden--visually\" id=\"sk-estimator-id-3\" type=\"checkbox\" checked><label for=\"sk-estimator-id-3\" class=\"sk-toggleable__label sk-toggleable__label-arrow\">SVC</label><div class=\"sk-toggleable__content\"><pre>SVC()</pre></div></div></div></div></div>"
+      ],
+      "text/plain": [
+       "SVC()"
+      ]
+     },
+     "execution_count": 33,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Instatiate SVM\n",
+    "classifier = svm.SVC()\n",
+    "classifier.fit(testing_vectors_experiment, reviews_test['Label'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "id": "88d65cc0",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:59.084836Z",
+     "iopub.status.busy": "2024-06-03T04:19:59.084399Z",
+     "iopub.status.idle": "2024-06-03T04:19:59.224216Z",
+     "shell.execute_reply": "2024-06-03T04:19:59.223437Z"
+    },
+    "papermill": {
+     "duration": 0.171718,
+     "end_time": "2024-06-03T04:19:59.226740",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:59.055022",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array(['pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos', 'pos',\n",
+       "       'pos', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg', 'neg',\n",
+       "       'neg', 'neg'], dtype=object)"
+      ]
+     },
+     "execution_count": 34,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Preds with test data\n",
+    "predictions_experiment = classifier.predict(testing_vectors_experiment)\n",
+    "predictions_experiment"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "34b71177",
+   "metadata": {
+    "papermill": {
+     "duration": 0.028034,
+     "end_time": "2024-06-03T04:19:59.282296",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:59.254262",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Let's review the accuracy of the new model."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "id": "88efe303",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:59.340482Z",
+     "iopub.status.busy": "2024-06-03T04:19:59.339347Z",
+     "iopub.status.idle": "2024-06-03T04:19:59.362923Z",
+     "shell.execute_reply": "2024-06-03T04:19:59.361910Z"
+    },
+    "papermill": {
+     "duration": 0.056705,
+     "end_time": "2024-06-03T04:19:59.366003",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:59.309298",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Positives:  {'precision': 1.0, 'recall': 1.0, 'f1-score': 1.0, 'support': 100}\n",
+      "Negatives:  {'precision': 1.0, 'recall': 1.0, 'f1-score': 1.0, 'support': 100}\n"
+     ]
+    }
+   ],
+   "source": [
+    "report = classification_report(reviews_test['Label'], predictions_experiment, output_dict=True)\n",
+    "print('Positives: ', report['pos'])\n",
+    "print('Negatives: ', report['neg'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b79ddf77",
+   "metadata": {
+    "papermill": {
+     "duration": 0.026879,
+     "end_time": "2024-06-03T04:19:59.420383",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:59.393504",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Unsurprisingly, nothing changes because our model was previous optimized."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d8dd82b3",
+   "metadata": {
+    "papermill": {
+     "duration": 0.02758,
+     "end_time": "2024-06-03T04:19:59.475280",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:59.447700",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 9: Experimentation"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "27322e86",
+   "metadata": {
+    "papermill": {
+     "duration": 0.026802,
+     "end_time": "2024-06-03T04:19:59.529320",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:59.502518",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "Now that we have trained and tuned our model to optimization, let's explore its application to producing predictions for other text data (unrealted to our previous corpus). Our SVM model is trained on sentiment assingments for the movie reviews text data (Content), so let's apply it to another random review style. For example, this review I have for the \"Ruggable\" rug I purchased a two months ago."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "id": "d6e0d393",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:59.586137Z",
+     "iopub.status.busy": "2024-06-03T04:19:59.585406Z",
+     "iopub.status.idle": "2024-06-03T04:19:59.743805Z",
+     "shell.execute_reply": "2024-06-03T04:19:59.742312Z"
+    },
+    "papermill": {
+     "duration": 0.190308,
+     "end_time": "2024-06-03T04:19:59.746811",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:59.556503",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<style>#sk-container-id-4 {color: black;background-color: white;}#sk-container-id-4 pre{padding: 0;}#sk-container-id-4 div.sk-toggleable {background-color: white;}#sk-container-id-4 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-4 label.sk-toggleable__label-arrow:before {content: \"▸\";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-4 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-4 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-4 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-4 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-4 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-4 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: \"▾\";}#sk-container-id-4 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-4 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-4 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-4 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-4 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-4 div.sk-parallel-item::after {content: \"\";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-4 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-4 div.sk-serial::before {content: \"\";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-4 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-4 div.sk-item {position: relative;z-index: 1;}#sk-container-id-4 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-4 div.sk-item::before, #sk-container-id-4 div.sk-parallel-item::before {content: \"\";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-4 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-4 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-4 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-4 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-4 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-4 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-4 div.sk-label-container {text-align: center;}#sk-container-id-4 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-4 div.sk-text-repr-fallback {display: none;}</style><div id=\"sk-container-id-4\" class=\"sk-top-container\"><div class=\"sk-text-repr-fallback\"><pre>SVC()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class=\"sk-container\" hidden><div class=\"sk-item\"><div class=\"sk-estimator sk-toggleable\"><input class=\"sk-toggleable__control sk-hidden--visually\" id=\"sk-estimator-id-4\" type=\"checkbox\" checked><label for=\"sk-estimator-id-4\" class=\"sk-toggleable__label sk-toggleable__label-arrow\">SVC</label><div class=\"sk-toggleable__content\"><pre>SVC()</pre></div></div></div></div></div>"
+      ],
+      "text/plain": [
+       "SVC()"
+      ]
+     },
+     "execution_count": 36,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "classifier = svm.SVC()\n",
+    "classifier.fit(testing_vectors, reviews_test['Label'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "id": "a3552aea",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:19:59.806162Z",
+     "iopub.status.busy": "2024-06-03T04:19:59.805753Z",
+     "iopub.status.idle": "2024-06-03T04:20:00.008886Z",
+     "shell.execute_reply": "2024-06-03T04:20:00.007509Z"
+    },
+    "papermill": {
+     "duration": 0.237155,
+     "end_time": "2024-06-03T04:20:00.012279",
+     "exception": false,
+     "start_time": "2024-06-03T04:19:59.775124",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "vectorizer = TfidfVectorizer(min_df = 1, max_df = 1.0, sublinear_tf = True, use_idf = True)\n",
+    "testing_vectors = vectorizer.fit_transform(reviews_test['Content'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "id": "f3fe3c60",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2024-06-03T04:20:00.070102Z",
+     "iopub.status.busy": "2024-06-03T04:20:00.069690Z",
+     "iopub.status.idle": "2024-06-03T04:20:00.077170Z",
+     "shell.execute_reply": "2024-06-03T04:20:00.076207Z"
+    },
+    "papermill": {
+     "duration": 0.04007,
+     "end_time": "2024-06-03T04:20:00.080152",
+     "exception": false,
+     "start_time": "2024-06-03T04:20:00.040082",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Review Prediction: ['neg']\n"
+     ]
+    }
+   ],
+   "source": [
+    "review = \"This is a bad product, I regret purchasing the rug\"\n",
+    "review_vector = vectorizer.transform([review])\n",
+    "print(\"Review Prediction:\", classifier.predict(review_vector))\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "95acf1d6",
+   "metadata": {
+    "papermill": {
+     "duration": 0.027578,
+     "end_time": "2024-06-03T04:20:00.136340",
+     "exception": false,
+     "start_time": "2024-06-03T04:20:00.108762",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "The SVM totally worked! My review is negative, and the output for this prediction - although applied to a new review, related to a rug purchase - is negative (\"neg\")."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2f57fd6a",
+   "metadata": {
+    "papermill": {
+     "duration": 0.027559,
+     "end_time": "2024-06-03T04:20:00.193155",
+     "exception": false,
+     "start_time": "2024-06-03T04:20:00.165596",
      "status": "completed"
     },
     "tags": []
    },
    "source": [
     "## Conclusions"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "cb1f7891",
+   "metadata": {
+    "papermill": {
+     "duration": 0.027754,
+     "end_time": "2024-06-03T04:20:00.248972",
+     "exception": false,
+     "start_time": "2024-06-03T04:20:00.221218",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "In conclusion, I have learned that sentiment analyses are mutli-faceted and complex. However, python simplfies the intestity of the workflow by providing SkLearn approaches such as TfidfVectorizer, which internally executes the convulted steps - simplfying the workflow by (arguably) by at least a 100 lines of code. That is huge! It makes the sentiment analysis application very accessible and efficient. \n",
+    "\n",
+    "For example, we learned that Term-Frequency vectors store the *frequency* of words in a corpus, assigned as their attribute values. Meanwhile, **Term Frequency - Inverse Document Frequency (TF-IDF)** vectors store the transformed, \"normalized\" value for *each* word represented in the text data. When using SkLearn's TfidfVectorizer, this process is streamlined internally - though, this denies the Data Scientistvisuals of the each intimate step in the transformation process. The Data Scientist needs to seek outside resources to understand these steps with intention, as demostrated briefly in this Notebook, during **Step 4: Prepreocessing**. \n",
+    "\n",
+    "The corpus or \"documents,\" of text, need to evolve into vectors of words called \"bag of words\", which is still a foreign step when attempting to apply a linear classifer. However, once we produce our training data, it is possible to proceed with the assumed workflow for any classification model. In this Notebook, we trained a Support Vector Machine linear classifier, after applying the necessary sentiment classifier to each label of the (transformed) text data."
    ]
   }
  ],
@@ -799,14 +2660,14 @@
   },
   "papermill": {
    "default_parameters": {},
-   "duration": 19.24017,
-   "end_time": "2024-06-03T00:03:09.248682",
+   "duration": 41.750827,
+   "end_time": "2024-06-03T04:20:01.403114",
    "environment_variables": {},
    "exception": null,
    "input_path": "__notebook__.ipynb",
    "output_path": "__notebook__.ipynb",
    "parameters": {},
-   "start_time": "2024-06-03T00:02:50.008512",
+   "start_time": "2024-06-03T04:19:19.652287",
    "version": "2.4.0"
   }
  },
